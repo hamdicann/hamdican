@@ -1,2 +1,0 @@
-# hamdican
-Personal CV
