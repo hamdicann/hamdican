@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamdi Can - İnteraktif Profesyonel Portföy</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom Configuration for Tailwind to ensure our calm harmony palette -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e293b', // slate-800
+                        secondary: '#475569', // slate-600
+                        accent: '#0284c7', // light blue / sky-600
+                        background: '#f8fafc', // slate-50
+                        surface: '#ffffff',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Chart Container Styling Requirement -->
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        
+        /* Smooth scrolling for navigation */
+        html { scroll-behavior: smooth; }
+
+        /* Mandatory Chart Container Styles */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px; 
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        .timeline-item.active {
+            border-left-color: #0284c7;
+            background-color: #f0f9ff;
+        }
+    </style>
+</head>
+<body class="antialiased font-sans">
+
+    <!-- Chosen Palette: Warm Neutrals with Sky Blue Accents (Slate & Sky) -->
+    <!-- Application Structure Plan: A dashboard-style professional portfolio. Instead of a traditional top-down CV, the layout separates concerns: Hero for quick identity, an interactive Radar Chart for skill balance (crucial for a multi-disciplinary Data/BA/Backend role), a dynamic timeline for experience to avoid text clutter, and a grid for projects. This allows recruiters to non-linearly explore what matters most to them. -->
+    <!-- Visualization & Content Choices: 
+         1. Skills -> Goal: Compare Multi-disciplinary proficiencies -> Viz: Chart.js Radar Chart -> Justification: Shows the balance between Data, Coding, and Business Analysis visually.
+         2. Experience -> Goal: Organize chronologically but keep layout clean -> Viz: Interactive Timeline -> Interaction: Click list to show details -> Justification: Prevents wall-of-text, encourages engagement.
+         3. Projects -> Goal: Inform -> Viz: Grid of Cards -> Justification: Easy scanning.
+         NO SVG/Mermaid used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-surface/90 backdrop-blur-md shadow-sm z-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="text-xl font-bold text-primary tracking-tight">HC.</div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#ozet" class="text-secondary hover:text-accent font-medium transition-colors">Özet</a>
+                    <a href="#yetenekler" class="text-secondary hover:text-accent font-medium transition-colors">Yetenekler</a>
+                    <a href="#deneyim" class="text-secondary hover:text-accent font-medium transition-colors">Deneyim</a>
+                    <a href="#projeler" class="text-secondary hover:text-accent font-medium transition-colors">Projeler</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-16 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24">
+
+        <!-- HERO SECTION -->
+        <section id="ozet" class="flex flex-col md:flex-row gap-8 items-center justify-between">
+            <div class="md:w-2/3 space-y-6">
+                <h1 class="text-5xl font-extrabold text-primary tracking-tight">Hamdi Can</h1>
+                <h2 class="text-2xl font-semibold text-accent">Junior Data Scientist & Business Analyst</h2>
+                
+                <p class="text-lg text-secondary leading-relaxed bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                    Matematik ve Bilgisayar Bilimleri altyapısına sahip, <strong>veri bilimi çıktılarını iş ihtiyaçlarıyla birleştirebilen</strong> çok yönlü bir profesyonelim. Python, SQL ve Derin Öğrenme tekniklerini (LSTM/Keras) kullanarak modeller geliştiriyor, Django ile API süreçlerini yönetiyor ve Jira/Confluence ile süreç dokümantasyonu yapıyorum. Amacım, teknik ekipler ile iş birimleri arasında veri odaklı çözümler üreterek karar destek mekanizmalarını güçlendirmektir.
+                </p>
+                
+                <div class="flex flex-wrap gap-4 text-sm text-secondary">
+                    <div class="flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-full"><span>📍</span> İstanbul, Türkiye</div>
+                    <div class="flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-full"><span>📞</span> +90 530 483 35 04</div>
+                    <div class="flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-full"><span>✉️</span> hamdiican1610@gmail.com</div>
+                    <a href="https://linkedin.com/in/hamdi-can-789152164" target="_blank" class="flex items-center gap-2 bg-blue-50 text-blue-700 hover:bg-blue-100 px-3 py-1.5 rounded-full transition-colors"><span>🔗</span> LinkedIn Profili</a>
+                </div>
+            </div>
+            
+            <div class="md:w-1/3 flex justify-center">
+                <!-- A decorative visual element representing Data & Structure (Using standard CSS, NO SVG) -->
+                <div class="relative w-64 h-64 bg-slate-100 rounded-full flex items-center justify-center border-8 border-white shadow-xl">
+                    <div class="text-6xl">📊</div>
+                    <div class="absolute top-0 right-0 w-16 h-16 bg-accent rounded-full border-4 border-white shadow-md flex items-center justify-center text-white text-xl font-bold">HC</div>
+                    <div class="absolute bottom-4 left-4 w-12 h-12 bg-slate-800 rounded-full border-4 border-white shadow-md flex items-center justify-center text-white text-sm">💻</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SKILLS SECTION -->
+        <section id="yetenekler" class="bg-white rounded-2xl shadow-sm border border-slate-100 p-8">
+            <div class="mb-8">
+                <h3 class="text-3xl font-bold text-primary mb-2">Yetenek Profili</h3>
+                <p class="text-secondary text-lg">
+                    Bu bölüm, veri işleme, yazılım geliştirme ve iş analizi alanlarındaki yetkinliklerimin dağılımını gösterir. Grafikteki etkileşimli yapı, teknik altyapım ile iş süreçleri yönetimimin nasıl dengelendiğini yansıtmaktadır.
+                </p>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-12 items-center">
+                <div class="w-full lg:w-1/2">
+                    <div class="chart-container">
+                        <canvas id="skillsChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="w-full lg:w-1/2 space-y-6">
+                    <!-- Data Category -->
+                    <div class="bg-slate-50 p-4 rounded-lg border-l-4 border-accent">
+                        <h4 class="font-bold text-primary text-lg mb-2">Veri Bilimi & Analizi</h4>
+                        <p class="text-sm text-secondary">Makine Öğrenmesi (Sınıflandırma, Regresyon), Derin Öğrenme (Keras, TensorFlow, LSTM), EDA (Pandas, NumPy), R ve SPSS ile Veri Analizi, Görselleştirme (Matplotlib, Seaborn).</p>
+                    </div>
+                    <!-- Dev Category -->
+                    <div class="bg-slate-50 p-4 rounded-lg border-l-4 border-slate-700">
+                        <h4 class="font-bold text-primary text-lg mb-2">Programlama & Web Geliştirme</h4>
+                        <p class="text-sm text-secondary">Python, R Dili, Django, REST API Entegrasyonu, SQL/PL-SQL.</p>
+                    </div>
+                    <!-- BA Category -->
+                    <div class="bg-slate-50 p-4 rounded-lg border-l-4 border-slate-400">
+                        <h4 class="font-bold text-primary text-lg mb-2">İş Analizi & Süreç Yönetimi</h4>
+                        <p class="text-sm text-secondary">Gereksinim Analizi, Süreç Haritalama (Microsoft Visio), SDLC, Jira, Confluence.</p>
+                    </div>
+                     <!-- Tools Category -->
+                     <div class="bg-slate-50 p-4 rounded-lg border-l-4 border-slate-300">
+                        <h4 class="font-bold text-primary text-lg mb-2">Veri Tabanları & Araçlar</h4>
+                        <p class="text-sm text-secondary">PostgreSQL, Oracle Database, MySQL, MongoDB, Git.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPERIENCE SECTION -->
+        <section id="deneyim" class="space-y-8">
+            <div>
+                <h3 class="text-3xl font-bold text-primary mb-2">Profesyonel Deneyim</h3>
+                <p class="text-secondary text-lg">
+                    Geçmişteki rollerimi ve bu rollerde ürettiğim katma değeri incelemek için sol taraftaki zaman çizelgesine tıklayın. Bu yapı, kariyer gelişimimi kronolojik ve odaklı bir şekilde incelemenizi sağlar.
+                </p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 min-h-[400px]">
+                <!-- Timeline List -->
+                <div class="md:w-1/3 border-r border-slate-200 pr-4 space-y-2 flex flex-col" id="timeline-list">
+                    <!-- Populated by JS -->
+                </div>
+                
+                <!-- Dynamic Content Display -->
+                <div class="md:w-2/3 pl-2" id="experience-details">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS SECTION -->
+        <section id="projeler" class="space-y-8">
+            <div>
+                <h3 class="text-3xl font-bold text-primary mb-2">Öne Çıkan Projeler</h3>
+                <p class="text-secondary text-lg">
+                    Akademik altyapımı ve staj deneyimlerimi pekiştiren, uçtan uca geliştirdiğim veya katkı sağladığım projeler. Bu projeler, teorik bilgilerin pratik iş senaryolarına nasıl uygulandığını göstermektedir.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Project 1 -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="text-3xl mb-4">📈</div>
+                    <h4 class="text-xl font-bold text-primary mb-2">Stock Market Prediction</h4>
+                    <p class="text-sm font-semibold text-accent mb-3">Flinx AI</p>
+                    <p class="text-secondary text-sm mb-4">Finansal zaman serileri için LSTM (Long Short-Term Memory) tabanlı tahminleme modeli geliştirme ve ürünleşme süreci için API entegrasyonu.</p>
+                    <div class="flex gap-2 text-xs font-medium text-slate-500">
+                        <span class="bg-slate-100 px-2 py-1 rounded">Python</span>
+                        <span class="bg-slate-100 px-2 py-1 rounded">LSTM/Keras</span>
+                        <span class="bg-slate-100 px-2 py-1 rounded">API</span>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="text-3xl mb-4">👥</div>
+                    <h4 class="text-xl font-bold text-primary mb-2">Customer Churn Prediction</h4>
+                    <p class="text-sm font-semibold text-slate-500 mb-3">Kişisel / Akademik Proje</p>
+                    <p class="text-secondary text-sm mb-4">Müşteri davranış verilerini kullanarak sınıflandırma modelleri oluşturma, kullanıcı kaybı (churn) tahmini yapma ve bu verilere dayalı aksiyon önerileri geliştirme.</p>
+                    <div class="flex gap-2 text-xs font-medium text-slate-500">
+                        <span class="bg-slate-100 px-2 py-1 rounded">Makine Öğrenmesi</span>
+                        <span class="bg-slate-100 px-2 py-1 rounded">Sınıflandırma</span>
+                        <span class="bg-slate-100 px-2 py-1 rounded">Scikit-learn</span>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="text-3xl mb-4">📅</div>
+                    <h4 class="text-xl font-bold text-primary mb-2">Booklify</h4>
+                    <p class="text-sm font-semibold text-slate-500 mb-3">Sistem Geliştirme</p>
+                    <p class="text-secondary text-sm mb-4">Randevu ve zamanlama sistemi için REST API oluşturma. Kullanıcı akışlarının tasarımı ve veri akışı iyileştirmelerinin gerçekleştirilmesi.</p>
+                    <div class="flex gap-2 text-xs font-medium text-slate-500">
+                        <span class="bg-slate-100 px-2 py-1 rounded">Django / REST API</span>
+                        <span class="bg-slate-100 px-2 py-1 rounded">Veri Tabanı</span>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="text-3xl mb-4">🔬</div>
+                    <h4 class="text-xl font-bold text-primary mb-2">Regresyon & Sınıflandırma Problemleri</h4>
+                    <p class="text-sm font-semibold text-slate-500 mb-3">Veri Analizi Çalışmaları</p>
+                    <p class="text-secondary text-sm mb-4">Çok değişkenli veri setleri üzerinde (Örn: Bodyfat, Kokteyl veri setleri) özellik çıkarma, veri temizleme, keşifsel analiz (EDA) ve model değerlendirme süreçleri.</p>
+                    <div class="flex flex-wrap gap-2 text-xs font-medium text-slate-500">
+                        <span class="bg-slate-100 px-2 py-1 rounded">EDA</span>
+                        <span class="bg-slate-100 px-2 py-1 rounded">Pandas/NumPy</span>
+                        <span class="bg-slate-100 px-2 py-1 rounded">R / SPSS</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EDUCATION, LANGUAGES & REFS GRID -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Education -->
+            <div class="bg-surface p-6 rounded-xl shadow-sm border border-slate-100">
+                <h3 class="text-xl font-bold text-primary mb-4 flex items-center gap-2"><span>🎓</span> Eğitim</h3>
+                <div class="space-y-2">
+                    <p class="font-bold text-slate-800">İstanbul Kültür Üniversitesi</p>
+                    <p class="text-secondary">Matematik ve Bilgisayar Bilimleri (Lisans)</p>
+                </div>
+            </div>
+
+            <!-- Languages -->
+            <div class="bg-surface p-6 rounded-xl shadow-sm border border-slate-100">
+                <h3 class="text-xl font-bold text-primary mb-4 flex items-center gap-2"><span>🌍</span> Diller</h3>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between text-sm font-medium mb-1">
+                            <span>İngilizce</span>
+                            <span class="text-accent">Akıcı</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2">
+                            <div class="bg-accent h-2 rounded-full" style="width: 90%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm font-medium mb-1">
+                            <span>Almanca</span>
+                            <span class="text-slate-500">Başlangıç</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2">
+                            <div class="bg-slate-300 h-2 rounded-full" style="width: 25%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- References -->
+            <div class="bg-surface p-6 rounded-xl shadow-sm border border-slate-100">
+                <h3 class="text-xl font-bold text-primary mb-4 flex items-center gap-2"><span>🤝</span> Referanslar</h3>
+                <ul class="space-y-3 text-sm">
+                    <li class="border-b border-slate-50 pb-2">
+                        <p class="font-bold text-slate-800">Özge Çiftbudak</p>
+                        <p class="text-slate-500 text-xs mb-1">Consultant Business Analyst, Chippin</p>
+                        <p class="text-accent">📞 +90 536 326 52 02</p>
+                    </li>
+                    <li class="border-b border-slate-50 pb-2">
+                        <p class="font-bold text-slate-800">Görkem Sefai</p>
+                        <p class="text-slate-500 text-xs mb-1">Team Leader, Software Dev, Etiya</p>
+                        <p class="text-accent">📞 +90 534 587 17 19</p>
+                    </li>
+                    <li>
+                        <p class="font-bold text-slate-800">Çiğdem Tuna</p>
+                        <p class="text-slate-500 text-xs mb-1">Senior Business Analyst, Türk Telekom</p>
+                        <p class="text-accent">📞 +90 553 489 12 85</p>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm">
+        <p>&copy; 2026 Hamdi Can. Tüm hakları saklıdır. Veri Odaklı Kararlar İçin.</p>
+    </footer>
+
+    <!-- INTERACTIVE LOGIC (Vanilla JS) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- 1. SKILLS RADAR CHART (Chart.js) ---
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            
+            // Customizing chart defaults for Tailwind styling
+            Chart.defaults.font.family = "'Inter', 'system-ui', 'sans-serif'";
+            Chart.defaults.color = '#64748b'; // slate-500
+
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        'Veri Analizi (EDA, Pandas)', 
+                        'Makine/Derin Öğrenme', 
+                        'Python & API (Django)', 
+                        'SQL & Veri Tabanı', 
+                        'İş Analizi & Süreç', 
+                        'Raporlama & Görselleştirme'
+                    ],
+                    datasets: [{
+                        label: 'Yetkinlik Seviyesi (Temsili Dağılım)',
+                        data: [90, 85, 85, 90, 80, 85],
+                        backgroundColor: 'rgba(2, 132, 199, 0.2)', // accent color with opacity
+                        borderColor: 'rgba(2, 132, 199, 1)',
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: 'rgba(2, 132, 199, 1)',
+                        pointHoverBackgroundColor: 'rgba(2, 132, 199, 1)',
+                        pointHoverBorderColor: '#fff',
+                        borderWidth: 2,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, /* Crucial for container constraints */
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(148, 163, 184, 0.3)' },
+                            grid: { color: 'rgba(148, 163, 184, 0.3)' },
+                            pointLabels: {
+                                font: { size: 11, weight: '600' },
+                                color: '#1e293b' // primary text color
+                            },
+                            ticks: {
+                                display: false, // hide numbers for cleaner look
+                                min: 0,
+                                max: 100
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#1e293b',
+                            padding: 12,
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 13 },
+                            callbacks: {
+                                label: function(context) {
+                                    return ' Profil Ağırlığı: ' + context.raw + '/100';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // --- 2. INTERACTIVE TIMELINE LOGIC ---
+            
+            // Experience Data Storage
+            const experiences = [
+                {
+                    id: 'exp1',
+                    role: 'Backend Developer / Data Scientist',
+                    company: 'Flinx AI',
+                    date: 'Haziran 2025 – Ocak 2026',
+                    icon: '🚀',
+                    details: `
+                        <div class="mb-4">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-bold uppercase tracking-wide">Mevcut Rol</span>
+                        </div>
+                        <h4 class="text-2xl font-bold text-primary mb-1">Backend Developer & Data Scientist</h4>
+                        <h5 class="text-lg font-medium text-accent mb-4">Flinx AI</h5>
+                        <p class="text-secondary mb-4 leading-relaxed">
+                            Finansal teknolojiler alanında veri bilimi çıktılarını doğrudan ürün altyapısına entegre ettiğim hibrit bir roldür.
+                        </p>
+                        <h6 class="font-bold text-slate-800 mb-2">Temel Sorumluluklar ve Çıktılar:</h6>
+                        <ul class="list-disc pl-5 space-y-2 text-secondary mb-6">
+                            <li>Finansal veriler üzerinde zaman serisi tahminleme (Time Series Forecasting) modelleri, özellikle <strong>LSTM</strong> ağları geliştirmek.</li>
+                            <li>Geliştirilen modellerin canlıya alınması için <strong>API hattı (pipeline)</strong> tasarımı ve geliştirilmesi.</li>
+                            <li>Veri bilimi algoritmalarının ve çıktılarının ürün akışına entegre edilerek genel <strong>sistem performansının iyileştirilmesi</strong>.</li>
+                        </ul>
+                        <div class="pt-4 border-t border-slate-100">
+                            <p class="text-sm font-semibold text-slate-600 mb-2">Kullanılan Temel Teknolojiler:</p>
+                            <div class="flex gap-2 text-xs text-slate-500">
+                                <span class="bg-slate-100 px-2 py-1 rounded">Python</span>
+                                <span class="bg-slate-100 px-2 py-1 rounded">Keras/TensorFlow</span>
+                                <span class="bg-slate-100 px-2 py-1 rounded">REST API</span>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    id: 'exp2',
+                    role: 'İş Analisti Stajyeri',
+                    company: 'Etiya',
+                    date: 'Temmuz 2025 – Ağustos 2025',
+                    icon: '📝',
+                    details: `
+                        <h4 class="text-2xl font-bold text-primary mb-1">İş Analisti (Business Analyst) Stajyeri</h4>
+                        <h5 class="text-lg font-medium text-accent mb-4">Etiya</h5>
+                        <p class="text-secondary mb-4 leading-relaxed">
+                            Telekomünikasyon projelerinde iş birimleri ile teknik geliştirme ekipleri arasında köprü kurarak süreçlerin sorunsuz ilerlemesini sağladım.
+                        </p>
+                        <h6 class="font-bold text-slate-800 mb-2">Temel Sorumluluklar ve Çıktılar:</h6>
+                        <ul class="list-disc pl-5 space-y-2 text-secondary mb-6">
+                            <li>Telekom projelerinde aktif rol alarak <strong>gereksinim toplama</strong>, süreç dokümantasyonu ve paydaş yönetimi faaliyetlerini yürütmek.</li>
+                            <li><strong>Jira ve Confluence</strong> kullanarak User Story yazımı, takibi ve proje süreçlerinin çevik (agile) yönetimine katkı sağlamak.</li>
+                            <li>Sistemin veri bütünlüğünü sağlamak adına veri tabanı tabloları için <strong>test ve validasyon süreçlerine</strong> destek vermek.</li>
+                        </ul>
+                        <div class="pt-4 border-t border-slate-100">
+                            <p class="text-sm font-semibold text-slate-600 mb-2">Kullanılan Temel Araçlar:</p>
+                            <div class="flex flex-wrap gap-2 text-xs text-slate-500">
+                                <span class="bg-slate-100 px-2 py-1 rounded">Jira</span>
+                                <span class="bg-slate-100 px-2 py-1 rounded">Confluence</span>
+                                <span class="bg-slate-100 px-2 py-1 rounded">Süreç Analizi</span>
+                                <span class="bg-slate-100 px-2 py-1 rounded">Validasyon</span>
+                            </div>
+                        </div>
+                    `
+                },
+                {
+                    id: 'exp3',
+                    role: 'Yazılım Geliştirici Stajyeri',
+                    company: 'Etiya',
+                    date: 'Temmuz 2024 – Ağustos 2024',
+                    icon: '💻',
+                    details: `
+                        <h4 class="text-2xl font-bold text-primary mb-1">Yazılım Geliştirici Stajyeri</h4>
+                        <h5 class="text-lg font-medium text-accent mb-4">Etiya</h5>
+                        <p class="text-secondary mb-4 leading-relaxed">
+                            Veri odaklı yazılım geliştirme, büyük veri kümeleri üzerinde sorgulama ve ön işleme teknikleri üzerine yoğunlaştığım teknik deneyim süreci.
+                        </p>
+                        <h6 class="font-bold text-slate-800 mb-2">Temel Sorumluluklar ve Çıktılar:</h6>
+                        <ul class="list-disc pl-5 space-y-2 text-secondary mb-6">
+                            <li><strong>PL/SQL ve Python</strong> dillerini kullanarak veri tabanı odaklı geliştirme ve kompleks sorguların optimizasyonu (tuning).</li>
+                            <li>Ham veriler üzerinde Keşifsel Veri Analizi <strong>(EDA - Exploratory Data Analysis)</strong> görevlerini yerine getirmek.</li>
+                            <li>Modelleme öncesi <strong>veri ön işleme</strong> adımlarını uygulamak; eksik verilerin giderilmesi ve aykırı değer (outlier) kontrolleri ile raporlama kalitesini artırmak.</li>
+                        </ul>
+                        <div class="pt-4 border-t border-slate-100">
+                            <p class="text-sm font-semibold text-slate-600 mb-2">Kullanılan Temel Teknolojiler:</p>
+                            <div class="flex gap-2 text-xs text-slate-500">
+                                <span class="bg-slate-100 px-2 py-1 rounded">PL/SQL</span>
+                                <span class="bg-slate-100 px-2 py-1 rounded">Python (Pandas)</span>
+                                <span class="bg-slate-100 px-2 py-1 rounded">EDA</span>
+                            </div>
+                        </div>
+                    `
+                }
+            ];
+
+            const timelineContainer = document.getElementById('timeline-list');
+            const detailsContainer = document.getElementById('experience-details');
+
+            // Render Timeline List
+            experiences.forEach((exp, index) => {
+                const item = document.createElement('div');
+                item.className = `timeline-item cursor-pointer p-4 border-l-4 border-transparent hover:bg-slate-50 rounded-r transition-all duration-200 ${index === 0 ? 'active' : ''}`;
+                item.dataset.id = exp.id;
+                item.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="text-xl">${exp.icon}</span>
+                        <div>
+                            <p class="font-bold text-slate-800 text-sm leading-tight">${exp.role}</p>
+                            <p class="text-accent text-xs font-semibold mt-1">${exp.company}</p>
+                            <p class="text-slate-400 text-xs mt-1">${exp.date}</p>
+                        </div>
+                    </div>
+                `;
+                
+                item.addEventListener('click', () => {
+                    // Remove active class from all
+                    document.querySelectorAll('.timeline-item').forEach(el => el.classList.remove('active'));
+                    // Add active class to clicked
+                    item.classList.add('active');
+                    // Update details pane
+                    updateDetailsPane(exp.details);
+                });
+
+                timelineContainer.appendChild(item);
+            });
+
+            // Function to update the right pane
+            function updateDetailsPane(htmlContent) {
+                // Add a subtle fade effect
+                detailsContainer.style.opacity = 0;
+                setTimeout(() => {
+                    detailsContainer.innerHTML = htmlContent;
+                    detailsContainer.style.transition = 'opacity 0.3s ease';
+                    detailsContainer.style.opacity = 1;
+                }, 150);
+            }
+
+            // Initialize with the first experience
+            if(experiences.length > 0) {
+                updateDetailsPane(experiences[0].details);
+            }
+
+        });
+    </script>
+</body>
+</html>
